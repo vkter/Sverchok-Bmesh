@@ -50,15 +50,9 @@ class SvBMOpsNode(SverchCustomTreeNode, bpy.types.Node):
         default=operators[0][0],
         items=operators,
         update=updata_oper)
-    copy : BoolProperty(
-        name = "Copy Bmesh",
-        description="Copy the input bmesh and apply the function on this basis. Disabling it will save performance, but the operation cannot be rolled back",
-        default = True,
-        update = updateNode)
 
     def draw_buttons(self, context, layout):
         layout.prop(self,'oper',text='')
-        layout.prop(self,'copy')
 
     def sv_init(self, context):
         for i,p in enumerate(dict_bmesh[operators[0][0]][1]):
@@ -70,12 +64,8 @@ class SvBMOpsNode(SverchCustomTreeNode, bpy.types.Node):
     def process(self):
         input = []
         for i,p in enumerate(dict_bmesh[self.oper][1]):
-            if i == 0 and self.copy :
-                value = self.inputs[p].sv_get()
-                value = [bm.copy() for bm in value]
-            else:
-                default = dict_bmesh[self.oper][2][i]
-                value = self.inputs[p].sv_get(default=[default])
+            default = dict_bmesh[self.oper][2][i]
+            value = self.inputs[p].sv_get(default=[default])
             input.append(value)
         input = match_long_repeat(input)
 
