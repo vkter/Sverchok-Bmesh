@@ -23,12 +23,12 @@ from sverchok.node_tree import SverchCustomTreeNode
 from sverchok.data_structure import updateNode
 from bpy.props import BoolProperty
 
-class SvBMoutputNode(SverchCustomTreeNode, bpy.types.Node):
+class SvBMoutNode(SverchCustomTreeNode, bpy.types.Node):
     ''' BMesh Out '''
-    bl_idname = 'SvBMoutputNode'
+    bl_idname = 'SvBMoutNode'
     bl_label = 'BMesh Out'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-    sv_icon = 'SV_ALPHA'
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_BM'
 
     free : BoolProperty(
     name = "Free Bmesh",
@@ -66,8 +66,8 @@ class SvBMoutputNode(SverchCustomTreeNode, bpy.types.Node):
 
 
 def register():
-    bpy.utils.register_class(SvBMoutputNode)
+    bpy.utils.register_class(SvBMoutNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(SvBMoutputNode)
+    bpy.utils.unregister_class(SvBMoutNode)

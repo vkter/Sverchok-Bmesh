@@ -32,12 +32,12 @@ def bm_from_pydata(v,e,f,unchanged=True):
             now_edge.index = i
     return bm
 
-class SvBMObjinputNode(SverchCustomTreeNode, bpy.types.Node):
+class SvBMInNode(SverchCustomTreeNode, bpy.types.Node):
     ''' BMesh In '''
-    bl_idname = 'SvBMObjinputNode'
+    bl_idname = 'SvBMInNode'
     bl_label = 'BMesh In'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-    sv_icon = 'SV_ALPHA' 
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_BM' 
 
     def updata_mode(self,context):
         for key in self.inputs.keys():
@@ -114,8 +114,8 @@ class SvBMObjinputNode(SverchCustomTreeNode, bpy.types.Node):
         self.outputs['Bmesh'].sv_set(bmesh_list)
 
 def register():
-    bpy.utils.register_class(SvBMObjinputNode)
+    bpy.utils.register_class(SvBMInNode)
 
 
 def unregister():
-    bpy.utils.unregister_class(SvBMObjinputNode)
+    bpy.utils.unregister_class(SvBMInNode)

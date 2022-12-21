@@ -29,8 +29,8 @@ from sverchok_bmesh.utils import show_welcome
 
 def nodes_index():
     return [("Bmesh", [
-                ("bmesh.bmesh_in", "SvBMObjinputNode"),
-                ("bmesh.bmesh_out", "SvBMoutputNode"),
+                ("bmesh.bmesh_in", "SvBMInNode"),
+                ("bmesh.bmesh_out", "SvBMoutNode"),
                 ("bmesh.bmesh_ops", "SvBMOpsNode"),
                 ("bmesh.bmesh_types", "SvBMTypesNode"),
                 ("bmesh.bmesh_utils", "SvBMUtilsNode"),
@@ -103,7 +103,7 @@ def reload_modules():
 def register():
     global our_menu_classes
 
-    debug("Registering sverchok-bmesh")
+    debug("Registering Sverchok-Bmesh")
 
     add_node_menu.register()
     settings.register()
@@ -114,7 +114,7 @@ def register():
 
 def unregister():
     global our_menu_classes
-    if 'SVERCHOK_EXTRA' in nodeitems_utils._node_categories:
+    if 'SVERCHOK_BMESH' in nodeitems_utils._node_categories:
         nodeitems_utils.unregister_node_categories("SVERCHOK_BMESH")
     for clazz in our_menu_classes:
         try:

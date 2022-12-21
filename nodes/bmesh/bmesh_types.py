@@ -31,8 +31,8 @@ class SvBMTypesNode(SverchCustomTreeNode, bpy.types.Node):
     '''The most basic types of operators in bmesh, which are the cornerstone of bmesh'''
     bl_idname = 'SvBMTypesNode'
     bl_label = 'BMesh Types'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-    sv_icon = 'SV_ALPHA'  # 'SV_BMESH_OPS'
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_BM'
     
     def updata_oper(self,context):
         for key in self.inputs.keys():

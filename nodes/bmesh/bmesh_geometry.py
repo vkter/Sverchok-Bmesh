@@ -31,8 +31,9 @@ class SvBMGeometryNode(SverchCustomTreeNode, bpy.types.Node):
     '''This module provides access to bmesh geometry evaluation functions.'''
     bl_idname = 'SvBMGeometryNode'
     bl_label = 'BMesh Geometry'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-    sv_icon = 'SV_ALPHA'  # 'SV_BMESH_OPS'
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_BM'
+    
     def updata_oper(self,context):
         for key in self.inputs.keys():
             self.safe_socket_remove('inputs',key)

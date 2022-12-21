@@ -31,8 +31,9 @@ class SvBMOpsNode(SverchCustomTreeNode, bpy.types.Node):
     ''' Operators for handling bmesh objects'''
     bl_idname = 'SvBMOpsNode'
     bl_label = 'BMesh Ops'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-    sv_icon = 'SV_ALPHA'  # 'SV_BMESH_OPS'
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_BM'
+    
     def updata_oper(self,context):
         for key in self.inputs.keys():
             self.safe_socket_remove('inputs',key)
