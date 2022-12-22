@@ -25,7 +25,7 @@ from sverchok.utils.sv_bmesh_utils import bmesh_from_pydata
 
 def bm_from_pydata(v,e,f,unchanged=True):
     'pydata to bmesh and Keep the index order of edges unchanged'
-    bm = bmesh_from_pydata(v,e,f)
+    bm = bmesh_from_pydata(v,e,f,normal_update= True)
     if unchanged:
         for i,initial_edge in enumerate(e):
             now_edge = bm.edges.get((bm.verts[initial_edge[0]],bm.verts[initial_edge[1]]))
