@@ -29,6 +29,7 @@ from sverchok_bmesh.utils import show_welcome
 
 def nodes_index():
     return [("Bmesh", [
+                ('bmesh.bmesh_viewer','SvBMeshViewer'),
                 ("bmesh.bmesh_in", "SvBMInNode"),
                 ("bmesh.bmesh_out", "SvBMoutNode"),
                 ("bmesh.bmesh_ops", "SvBMOpsNode"),
