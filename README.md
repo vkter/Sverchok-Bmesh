@@ -10,4 +10,4 @@
 ## Installation
 Install Sverchok-Bmesh as you would install sverchok.
 ## Support
-patreon : https://www.patreon.com/notifications
+patreon : https://www.patreon.com/vkter
