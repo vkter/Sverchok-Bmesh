@@ -1,10 +1,3 @@
-# This file is part of project Sverchok. It's copyrighted by the contributors
-# recorded in the version control history of the file, available from
-# its original location https://github.com/nortikin/sverchok/commit/master
-#
-# SPDX-License-Identifier: GPL3
-# License-Filename: LICENSE
-
 from itertools import cycle
 
 import bpy
@@ -22,12 +15,11 @@ from sverchok.utils.logging import fix_error_msg
 class SvBMeshViewer(Show3DProperties, SvViewerNode, SverchCustomTreeNode, bpy.types.Node):
     """
     Triggers: viewer Bmesh object instance
-    Tooltip: Generate/Update mesh objects in viewport. Blender’s Modifier stack can be used but Skin modifier.\n\tIn: Vertices, Edges, Faces, Materials/idx, Matrixes\n\tParams: Mesh Name, Origin, Merge\n\tExtra:Fast Update, Smooth Shade (N-panel)
+    Tooltip: Generate/Update mesh objects in viewport. 
     """
 
     bl_idname = 'SvBMeshViewer'
     bl_label = 'BMesh Viewer'
-    bl_icon = 'OUTLINER_OB_MESH'
     sv_icon = 'SV_BM_BM'
 
     show_wireframe: BoolProperty(default=True, update=updateNode, name="Show Edges")
