@@ -1,0 +1,82 @@
+import bpy,bmesh,mathutils
+from bpy.props import EnumProperty, FloatProperty
+from sverchok.node_tree import SverchCustomTreeNode
+from sverchok.data_structure import (updateNode, enum_item as e, second_as_first_cycle as safc,match_long_repeat)
+
+dict_mathutils = {"area_tri()": ["Returns the area size of the 2D or 3D triangle defined.\n", ["v1", "v2", "v3"], ["v1 (mathutils.Vector) \u2013 Point1\n", "v2 (mathutils.Vector) \u2013 Point2\n", "v3 (mathutils.Vector) \u2013 Point3\n"], "None"], "barycentric_transform()": ["Return a transformed point, the transformation is defined by 2 triangles.\n", ["point", "tri_a1", "tri_a2", "tri_a3", "tri_b1", "tri_b2", "tri_b3"], ["point (mathutils.Vector) \u2013 The point to transform.\n", "tri_a1 (mathutils.Vector) \u2013 source triangle vertex.\n", "tri_a2 (mathutils.Vector) \u2013 source triangle vertex.\n", "tri_a3 (mathutils.Vector) \u2013 source triangle vertex.\n", "tri_b1 (mathutils.Vector) \u2013 target triangle vertex.\n", "tri_b2 (mathutils.Vector) \u2013 target triangle vertex.\n", "tri_b3 (mathutils.Vector) \u2013 target triangle vertex.\n"], "Returns\nThe transformed point\nReturn type\nmathutils.Vector\u2019s\n"], "box_fit_2d()": ["Returns an angle that best fits the points to an axis aligned rectangle\n", ["points"], ["points (list) \u2013 list of 2d points.\n"], "Returns\nangle\nReturn type\nfloat\n"], "box_pack_2d()": ["Returns a tuple with the width and height of the packed bounding box.\n", ["boxes"], ["boxes (list) \u2013 list of boxes, each box is a list where the first 4 items are [x, y, width, height, \u2026] other items are ignored.\n"], "Returns\nthe width and height of the packed bounding box\nReturn type\ntuple, pair of floats\n"], "closest_point_on_tri()": ["Takes 4 vectors: one is the point and the next 3 define the triangle.\n", ["pt", "tri_p1", "tri_p2", "tri_p3"], ["pt (mathutils.Vector) \u2013 Point\n", "tri_p1 (mathutils.Vector) \u2013 First point of the triangle\n", "tri_p2 (mathutils.Vector) \u2013 Second point of the triangle\n", "tri_p3 (mathutils.Vector) \u2013 Third point of the triangle\n"], "Returns\nThe closest point of the triangle.\nReturn type\nmathutils.Vector\n"], "convex_hull_2d()": ["Returns a list of indices into the list given\n", ["points"], ["points (list) \u2013 list of 2d points.\n"], "Returns\na list of indices\nReturn type\nlist of ints\n"], "delaunay_2d_cdt()": ["Computes the Constrained Delaunay Triangulation of a set of vertices, with edges and faces that must appear in the triangulation. Some triangles may be eaten away, or combined with other triangles, according to output type. The returned verts may be in a different order from input verts, may be moved slightly, and may be merged with other nearby verts. The three returned orig lists give, for each of verts, edges, and faces, the list of input element indices corresponding to the positionally same output element. For edges, the orig indices start with the input edges and then continue with the edges implied by each of the faces (n of them for an n-gon). If the need_ids argument is supplied, and False, then the code skips the preparation of the orig arrays, which may save some time. :arg vert_coords: Vertex coordinates (2d) :type vert_coords: list of mathutils.Vector :arg edges: Edges, as pairs of indices in vert_coords :type edges: list of (int, int) :arg faces: Faces, each sublist is a face, as indices in vert_coords (CCW oriented) :type faces: list of list of int :arg output_type: What output looks like. 0 => triangles with convex hull. 1 => triangles inside constraints. 2 => the input constraints, intersected. 3 => like 2 but detect holes and omit them from output. 4 => like 2 but with extra edges to make valid BMesh faces. 5 => like 4 but detect holes and omit them from output. :type output_type: intn :arg epsilon: For nearness tests; should not be zero :type epsilon: float :arg need_ids: are the orig output arrays needed? :type need_args: bool :return: Output tuple, (vert_coords, edges, faces, orig_verts, orig_edges, orig_faces) :rtype: (list of mathutils.Vector, list of (int, int), list of list of int, list of list of int, list of list of int, list of list of int)\n", ["vert_coords", "edges", "faces", "output_type", "epsilon", "need_ids"], ['arg vert_coords: Vertex coordinates (2d) :type vert_coords: list of mathutils.Vector','arg edges: Edges, as pairs of indices in vert_coords :type edges: list of (int, int)','faces: Faces, each sublist is a face, as indices in vert_coords (CCW oriented) :type faces: list of list of int','Calculation mode, enter int(0~5) type ','epsilon: For nearness tests; should not be zero :type epsilon: float','arg need_ids: are the orig output arrays needed? :type need_args: bool'], "return: Output tuple, (vert_coords, edges, faces, orig_verts, orig_edges, orig_faces) :rtype: (list of mathutils.Vector, list of (int, int), list of list of int, list of list of int, list of list of int, list of list of int)\n"], "distance_point_to_plane()": ["Returns the signed distance between a point and a plane (negative when below the normal).\n", ["pt", "plane_co", "plane_no"], ["pt (mathutils.Vector) \u2013 Point\n", "plane_co (mathutils.Vector) \u2013 A point on the plane\n", "plane_no (mathutils.Vector) \u2013 The direction the plane is facing\n"], "None"], "interpolate_bezier()": ["Interpolate a bezier spline segment.\n", ["knot1", "handle1", "handle2", "knot2", "resolution"], ["knot1 (mathutils.Vector) \u2013 First bezier spline point.\n", "handle1 (mathutils.Vector) \u2013 First bezier spline handle.\n", "handle2 (mathutils.Vector) \u2013 Second bezier spline handle.\n", "knot2 (mathutils.Vector) \u2013 Second bezier spline point.\n", "resolution (int) \u2013 Number of points to return.\n"], "Returns\nThe interpolated points\nReturn type\nlist of mathutils.Vector\u2019s\n"], "intersect_line_line()": ["Returns a tuple with the points on each line respectively closest to the other.\n", ["v1", "v2", "v3", "v4"], ["v1 (mathutils.Vector) \u2013 First point of the first line\n", "v2 (mathutils.Vector) \u2013 Second point of the first line\n", "v3 (mathutils.Vector) \u2013 First point of the second line\n", "v4 (mathutils.Vector) \u2013 Second point of the second line\n"], "None"], "intersect_line_line_2d()": ["Takes 2 segments (defined by 4 vectors) and returns a vector for their point of intersection or None.\nWarning\nDespite its name, this function works on segments, and not on lines.\n", ["lineA_p1", "lineA_p2", "lineB_p1", "lineB_p2"], ["lineA_p1 (mathutils.Vector) \u2013 First point of the first line\n", "lineA_p2 (mathutils.Vector) \u2013 Second point of the first line\n", "lineB_p1 (mathutils.Vector) \u2013 First point of the second line\n", "lineB_p2 (mathutils.Vector) \u2013 Second point of the second line\n"], "Returns\nThe point of intersection or None when not found\nReturn type\nmathutils.Vector or None\n"], "intersect_line_plane()": ["Calculate the intersection between a line (as 2 vectors) and a plane. Returns a vector for the intersection or None.\n", ["line_a", "line_b", "plane_co", "plane_no", "no_flip"], ["line_a (mathutils.Vector) \u2013 First point of the first line\n", "line_b (mathutils.Vector) \u2013 Second point of the first line\n", "plane_co (mathutils.Vector) \u2013 A point on the plane\n", "plane_no (mathutils.Vector) \u2013 The direction the plane is facing\n", "None"], "Returns\nThe point of intersection or None when not found\nReturn type\nmathutils.Vector or None\n"], "intersect_line_sphere()": ["Takes a line (as 2 points) and a sphere (as a point and a radius) and returns the intersection\n", ["line_a", "line_b", "sphere_co", "sphere_radius", "clip"], ["line_a (mathutils.Vector) \u2013 First point of the line\n", "line_b (mathutils.Vector) \u2013 Second point of the line\n", "sphere_co (mathutils.Vector) \u2013 The center of the sphere\n", "sphere_radius (sphere_radius) \u2013 Radius of the sphere\n", "None"], "Returns\nThe intersection points as a pair of vectors or None when there is no intersection\nReturn type\nA tuple pair containing mathutils.Vector or None\n"], "intersect_line_sphere_2d()": ["Takes a line (as 2 points) and a sphere (as a point and a radius) and returns the intersection\n", ["line_a", "line_b", "sphere_co", "sphere_radius", "clip"], ["line_a (mathutils.Vector) \u2013 First point of the line\n", "line_b (mathutils.Vector) \u2013 Second point of the line\n", "sphere_co (mathutils.Vector) \u2013 The center of the sphere\n", "sphere_radius (sphere_radius) \u2013 Radius of the sphere\n", "None"], "Returns\nThe intersection points as a pair of vectors or None when there is no intersection\nReturn type\nA tuple pair containing mathutils.Vector or None\n"], "intersect_plane_plane()": ["Return the intersection between two planes\n", ["plane_a_co", "plane_a_no", "plane_b_co", "plane_b_no"], ["plane_a_co (mathutils.Vector) \u2013 Point on the first plane\n", "plane_a_no (mathutils.Vector) \u2013 Normal of the first plane\n", "plane_b_co (mathutils.Vector) \u2013 Point on the second plane\n", "plane_b_no (mathutils.Vector) \u2013 Normal of the second plane\n"], "Returns\nThe line of the intersection represented as a point and a vector\nReturn type\ntuple pair of mathutils.Vector or None if the intersection can\u2019t be calculated\n"], "intersect_point_line()": ["Takes a point and a line and returns a tuple with the closest point on the line and its distance from the first point of the line as a percentage of the length of the line.\n", ["pt", "line_p1", "line_p2"], ["pt (mathutils.Vector) \u2013 Point\n", "line_p1 \u2013 Second point of the line\n", "None"], "None"], "intersect_point_quad_2d()": ["Takes 5 vectors (using only the x and y coordinates): one is the point and the next 4 define the quad, only the x and y are used from the vectors. Returns 1 if the point is within the quad, otherwise 0. Works only with convex quads without singular edges.\n", ["pt", "quad_p1", "quad_p2", "quad_p3", "quad_p4"], ["pt (mathutils.Vector) \u2013 Point\n", "quad_p1 (mathutils.Vector) \u2013 First point of the quad\n", "quad_p2 (mathutils.Vector) \u2013 Second point of the quad\n", "quad_p3 (mathutils.Vector) \u2013 Third point of the quad\n", "quad_p4 (mathutils.Vector) \u2013 Fourth point of the quad\n"], "None"], "intersect_point_tri()": ["Takes 4 vectors: one is the point and the next 3 define the triangle. Projects the point onto the triangle plane and checks if it is within the triangle.\n", ["pt", "tri_p1", "tri_p2", "tri_p3"], ["pt (mathutils.Vector) \u2013 Point\n", "tri_p1 (mathutils.Vector) \u2013 First point of the triangle\n", "tri_p2 (mathutils.Vector) \u2013 Second point of the triangle\n", "tri_p3 (mathutils.Vector) \u2013 Third point of the triangle\n"], "Returns\nPoint on the triangles plane or None if its outside the triangle\nReturn type\nmathutils.Vector or None\n"], "intersect_point_tri_2d()": ["Takes 4 vectors (using only the x and y coordinates): one is the point and the next 3 define the triangle. Returns 1 if the point is within the triangle, otherwise 0.\n", ["pt", "tri_p1", "tri_p2", "tri_p3"], ["pt (mathutils.Vector) \u2013 Point\n", "tri_p1 (mathutils.Vector) \u2013 First point of the triangle\n", "tri_p2 (mathutils.Vector) \u2013 Second point of the triangle\n", "tri_p3 (mathutils.Vector) \u2013 Third point of the triangle\n"], "None"], "intersect_ray_tri()": ["Returns the intersection between a ray and a triangle, if possible, returns None otherwise.\n", ["v1", "v2", "v3", "ray", "orig", "clip"], ["v1 (mathutils.Vector) \u2013 Point1\n", "v2 (mathutils.Vector) \u2013 Point2\n", "v3 (mathutils.Vector) \u2013 Point3\n", "ray (mathutils.Vector) \u2013 Direction of the projection\n", "orig (mathutils.Vector) \u2013 Origin\n", "clip (boolean) \u2013 When False, don\u2019t restrict the intersection to the area of the triangle, use the infinite plane defined by the triangle.\n"], "Returns\nThe point of intersection or None if no intersection is found\nReturn type\nmathutils.Vector or None\n"], "intersect_sphere_sphere_2d()": ["Returns 2 points on between intersecting circles.\n", ["p_a", "radius_a", "p_b", "radius_b"], ["p_a (mathutils.Vector) \u2013 Center of the first circle\n", "radius_a (float) \u2013 Radius of the first circle\n", "p_b (mathutils.Vector) \u2013 Center of the second circle\n", "radius_b (float) \u2013 Radius of the second circle\n"], "None"], "intersect_tri_tri_2d()": ["Check if two 2D triangles intersect.\nReturn type\nbool\n", ["tri_a1", "tri_a2", "tri_a3", "tri_b1", "tri_b2", "tri_b3"], [], "None"], "normal()": ["Returns the normal of a 3D polygon.\n", ["vectors"], ["vectors (sequence of 3 or more 3d vector) \u2013 Vectors to calculate normals with\n"], "None"], "points_in_planes()": ["Returns a list of points inside all planes given and a list of index values for the planes used.\n", ["planes"], ["planes (list of mathutils.Vector) \u2013 List of planes (4D vectors).\n"], "Returns\ntwo lists, once containing the vertices inside the planes, another containing the plane indices used\nReturn type\npair of lists\n"], "tessellate_polygon()": ["Takes a list of polylines (each point a pair or triplet of numbers) and returns the point indices for a polyline filled with triangles. Does not handle degenerate geometry (such as zero-length lines due to consecutive identical points).\n", ["veclist_list"], ["veclist_list \u2013 list of polylines\n"], "None"], "volume_tetrahedron()": ["Return the volume formed by a tetrahedron (points can be in any order).\n", ["v1", "v2", "v3", "v4"], ["v1 (mathutils.Vector) \u2013 Point1\n", "v2 (mathutils.Vector) \u2013 Point2\n", "v3 (mathutils.Vector) \u2013 Point3\n", "v4 (mathutils.Vector) \u2013 Point4\n"], "None"]}
+types = []
+for i,type in enumerate(dict_mathutils.keys()):
+    types.append((type,type,dict_mathutils[type][0],i))
+
+class SvMathuGeoNode(SverchCustomTreeNode, bpy.types.Node):
+    '''The Blender mathutils.geometry module'''
+    bl_idname = 'SvMathuGeoNode'
+    bl_label = 'Mathutils Geometry'
+    #bl_icon = 'OUTLINER_OB_EMPTY'
+    sv_icon = 'SV_BM_MU'
+    
+    def updata_oper(self,context):
+        for key in self.inputs.keys():
+            self.safe_socket_remove('inputs',key)
+
+        for i,p in enumerate(dict_mathutils[self.oper][1]):
+            pras = dict_mathutils[self.oper][2]
+            if pras:
+                des = pras[i]
+            else:
+                des = 'None'
+            self.inputs.new('SvStringsSocket',p).description = des
+        self.outputs['return'].description = dict_mathutils[self.oper][-1]
+        updateNode(self,context)
+
+    oper: EnumProperty(
+        name='Operators',
+        description = 'Operator of mathutils.geometry',
+        items= types,
+        update=updata_oper)
+    
+    def draw_buttons(self, context, layout):
+        layout.prop(self,'oper',text='')
+
+    def sv_init(self, context):
+        for i,p in enumerate(dict_mathutils[self.oper][1]):
+            des = dict_mathutils[self.oper][2][i]
+            self.inputs.new('SvStringsSocket',p).description = des
+        self.outputs.new('SvStringsSocket','return').description = dict_mathutils[self.oper][-1]
+        
+    def process(self):
+        input = []
+        for p in self.inputs.keys():
+            value = self.inputs[p].sv_get(default = [])
+            input.append(value)
+        input = match_long_repeat(input)
+
+        if self.inputs[0].is_linked:
+            return_ = self.proce(input)
+        else:
+            return_ = []
+        self.outputs['return'].sv_set(return_)
+
+    def proce(self,input):
+        return_ = []
+        for pars in zip(*input):
+            result = []
+            for p in zip(*pars):
+                for i in range(len(p)):
+                    name_p = dict_mathutils[self.oper][1][i]
+                    exec(name_p + '=p[i]')
+                    if i == 0 :
+                        param = name_p
+                    else:
+                        param += ','+ name_p
+                fun = 'mathutils.geometry.' + self.oper[:-2] + '(' + param + ')'
+                result.append(eval(fun))
+            return_.append(result)
+        return return_
+
+def register():
+    bpy.utils.register_class(SvMathuGeoNode)
+
+
+def unregister():
+    bpy.utils.unregister_class(SvMathuGeoNode)

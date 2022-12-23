@@ -127,10 +127,10 @@ class SvBMTypesNode(SverchCustomTreeNode, bpy.types.Node):
             else :
                 result = []
                 for p in zip(*pars):
-                    if len(pars) == 1:
+                    if len(p) == 1:
                         fun = 'p[0]'+ '.' + self.oper
                     else:
-                        for i in range(len(pars)-1):
+                        for i in range(len(p)-1):
                             name_p = dict_bmesh[self.typ][self.clas][1][self.oper][1][i]
                             value = name_p
                             exec(value + '=p[i+1]')
