@@ -37,7 +37,11 @@ def nodes_index():
                 ("bmesh.bmesh_utils", "SvBMUtilsNode"),
                 ("bmesh.bmesh_geometry", "SvBMGeometryNode"),
                 ('bmesh.mathutils','SvMathutilsNode'),
-                ('bmesh.mathutils_geometry','SvMathuGeoNode')
+                ('bmesh.mathutils_geometry','SvMathuGeoNode'),
+                ('bmesh.mathutils_bvhtree','SvMathuBvhNode'),
+                ('bmesh.mathutils_kdtree','SvMathuKdNode'),
+                ('bmesh.mathutils_interpolate','SvMathuInterNode'),
+                ('bmesh.mathutils_noise','SvMathuNoiseNode')
             ])
     ]
 
