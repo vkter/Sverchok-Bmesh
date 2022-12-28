@@ -25,6 +25,7 @@ if __name__ != "sverchok_bmesh":
 
 from sverchok_bmesh import icons
 from sverchok_bmesh import settings
+from sverchok_bmesh import examples
 from sverchok_bmesh.utils import show_welcome
 
 def nodes_index():
@@ -117,6 +118,9 @@ def register():
     icons.register()
 
     register_nodes()
+
+    examples.register()
+
     show_welcome()
 
 def unregister():

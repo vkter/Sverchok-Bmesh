@@ -30,6 +30,7 @@ def bm_from_pydata(v,e,f,unchanged=True):
         for i,initial_edge in enumerate(e):
             now_edge = bm.edges.get((bm.verts[initial_edge[0]],bm.verts[initial_edge[1]]))
             now_edge.index = i
+        bm.edges.sort()
     return bm
 
 class SvBMInNode(SverchCustomTreeNode, bpy.types.Node):
