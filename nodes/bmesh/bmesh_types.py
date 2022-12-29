@@ -119,9 +119,11 @@ class SvBMTypesNode(SverchCustomTreeNode, bpy.types.Node):
                         value = name_p
                         exec(value + '=pars[i+1]')
                         if i == 0:
-                            parameters = name_p + '=' + value
+                            #parameters = name_p + '=' + value
+                            parameters = value
                         else:
-                            parameters += ',' + name_p + '=' + value
+                            #parameters += ',' + name_p + '=' + value
+                            parameters += value
                     fun = 'pars[0]' + '.' + self.oper[:-2] +'(' + parameters +')'
                 return_.append(eval(fun))
             else :
@@ -135,9 +137,11 @@ class SvBMTypesNode(SverchCustomTreeNode, bpy.types.Node):
                             value = name_p
                             exec(value + '=p[i+1]')
                             if i == 0:
-                                parameters = name_p + '=' + value
+                                #parameters = name_p + '=' + value
+                                parameters = value
                             else:
-                                parameters += ',' + name_p + '=' + value
+                                #parameters += ',' + name_p + '=' + value
+                                parameters += value
                         fun = 'p[0]' + '.' + self.oper[:-2] +'(' + parameters +')'
                     result.append(eval(fun))
                 return_.append(result)
