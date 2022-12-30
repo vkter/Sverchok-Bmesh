@@ -127,6 +127,7 @@ class SvBMTypesNode(SverchCustomTreeNode, bpy.types.Node):
                     fun = 'pars[0]' + '.' + self.oper[:-2] +'(' + parameters +')'
                 return_.append(eval(fun))
             else :
+                pars = match_long_repeat(pars)
                 result = []
                 for p in zip(*pars):
                     if len(p) == 1:
