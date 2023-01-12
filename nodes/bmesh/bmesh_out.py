@@ -33,7 +33,7 @@ class SvBMoutNode(SverchCustomTreeNode, bpy.types.Node):
     free : BoolProperty(
     name = "Free Bmesh",
     description="Destroy the bmesh object from memory",
-    default = True,
+    default = False,
     update = updateNode)
 
     def draw_buttons(self, context, layout):
