@@ -63,7 +63,11 @@ class SvBMeshViewer(Show3DProperties, SvViewerNode, SverchCustomTreeNode, bpy.ty
         # regenerate mesh data blocks
         meshes = []
         for name,bm in zip(names,Bmesh):
-            mesh = bpy.data.meshes.new(name=name)
+            ind = bpy.data.meshes.find(name)
+            if ind != -1:
+                mesh = bpy.data.meshes[ind]
+            else:
+                mesh = bpy.data.meshes.new(name=name)
             bm.to_mesh(mesh)
             meshes.append(mesh)
             if self.free:
