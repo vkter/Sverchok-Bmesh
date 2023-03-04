@@ -202,9 +202,9 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
                         bm_reds.append(_bm)
                 self.__annotations__.update()
             
-            if len(bm_reds)>2:
-                bm_reds[0].free()
-                bm_reds.pop(0)
+            #if len(bm_reds)>2:
+            #    bm_reds[0].free()
+            #    bm_reds.pop(0)
                 
     def draw_buttons(self,context,layout):
         layout.prop(self,'bm_category',text="")
