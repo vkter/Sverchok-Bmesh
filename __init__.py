@@ -34,7 +34,7 @@ def nodes_index():
                 ("bmesh.bmesh_in", "SvBMInNode"),
                 ("bmesh.bmesh_out", "SvBMoutNode"),
                 ("bmesh.bmesh_ops", "SvBMOpsNode"),
-                ("bmesh.bmesh_ops_lite", "SvBMOpsLiteNode"),
+                ("bmesh.bmesh_ops_lite", "SvBmeshOpsLiteNode"),
                 ("bmesh.bmesh_types", "SvBMTypesNode"),
                 ("bmesh.bmesh_utils", "SvBMUtilsNode"),
                 ("bmesh.bmesh_geometry", "SvBMGeometryNode"),
