@@ -148,7 +148,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         self.outputs.new('SvStringsSocket','Faces (Indices)').hide_safe=True
         self.enum_update(context)
         
-     def process(self):
+    def process(self):
         bmesh_objects=self.__annotations__['bmesh_objects']
         bmesh_buffers=self.__annotations__['bmesh_buffers']
         if self.inputs[0].is_linked and self.outputs[0].is_linked:
@@ -171,19 +171,18 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
             self.outputs[0].sv_set([buff_bm])
             self.outputs[1].sv_set([ret])
             if ret:
-                for _name,_vals in ret.items():
-                    out=self.outputs[_name.capitalize()+' (Indicies)']
-                    out.hide=False
-                    _val_indexes=[]
-                    for val in _vals:
-                        _val_indexes.append(val.index)
-                    out.sv_set([_val_indexes])
-                    
-            for out in self.outputs:
-                try:
-                    out.sv_get()
-                except:
-                    out.hide_safe=True
+                if self.calculate_indices:
+                    for _name,_vals in ret.items():
+                        out=self.outputs[_name.capitalize()+' (Indices)']
+                        out.hide=False
+                        _val_indexes=[]
+                        for val in _vals:
+                            _val_indexes.append(val.index)
+                        out.sv_set([_val_indexes])
+                else:
+                    for out in self.outputs[2:]:
+                        if not out.hide_safe:
+                            out.hide_safe=True
             
             if len(bmesh_buffers)>1:
                 del bmesh_buffers[0]
