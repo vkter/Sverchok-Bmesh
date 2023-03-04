@@ -148,11 +148,12 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         self.outputs.new('SvStringsSocket','Faces (Indices)').hide_safe=True
         self.enum_update(context)
         
-    def process(self):
+     def process(self):
         bmesh_objects=self.__annotations__['bmesh_objects']
         bmesh_buffers=self.__annotations__['bmesh_buffers']
         if self.inputs[0].is_linked and self.outputs[0].is_linked:
             inp_val=self.inputs[0].sv_get()[0]
+                
             try:
                 inp_val.verts
                 if not inp_val in bmesh_objects:
@@ -169,27 +170,27 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
             ret=self.exec_function(buff_bm,self.geom_ops,geom_context=option)
             self.outputs[0].sv_set([buff_bm])
             self.outputs[1].sv_set([ret])
-            
             if ret:
-                if self.calculate_indices:
-                    for _name,_vals in ret.items():
-                        out=self.outputs[_name.capitalize()+' (Indices)']
-                        out.hide_safe=False
-                        _val_indexes=[]
-                        for val in _vals:
-                            _val_indexes.append(val.index)
-                        out.sv_set([_val_indexes])
-                else:
-                    for sock in self.outputs[2:]:
-                        if not sock.hide_safe:
-                            sock.hide_safe=True
-            #Auto-free bmesh
+                for _name,_vals in ret.items():
+                    out=self.outputs[_name.capitalize()]
+                    out.hide=False
+                    _val_indexes=[]
+                    for val in _vals:
+                        _val_indexes.append(val.index)
+                    out.sv_set([_val_indexes])
+                    
+            for out in self.outputs:
+                try:
+                    out.sv_get()
+                except:
+                    out.hide_safe=True
+            
             if len(bmesh_buffers)>1:
                 del bmesh_buffers[0]
 
             if len(bmesh_objects)>1:
                 bmesh_objects[0].free()
-                bmesh_objects.pop(0)
+                del bmesh_objects[0]
                 self.__annotations__.update()
             
                 
