@@ -172,7 +172,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
             self.outputs[1].sv_set([ret])
             if ret:
                 for _name,_vals in ret.items():
-                    out=self.outputs[_name.capitalize()]
+                    out=self.outputs[_name.capitalize()+' (Indicies)']
                     out.hide=False
                     _val_indexes=[]
                     for val in _vals:
