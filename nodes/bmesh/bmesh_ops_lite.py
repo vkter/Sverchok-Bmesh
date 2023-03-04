@@ -134,7 +134,6 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
     general_category: EnumProperty(items=operation_categories[1:4],update=updateNode)
     geom_ops: EnumProperty(items=context_options,update=enum_update,default=0,description='Geometry operation')
     calculate_indices: BoolProperty(name='Calculate indices',description='Calculate the indices of newly created geometry(if any)',update=updateNode)
-    bm_reds: []
     
     def sv_init(self,context):
         inp1=self.inputs.new('SvStringsSocket','Bmesh')
@@ -152,7 +151,6 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
     def process(self):
         bmesh_objects=self.__annotations__['bmesh_objects']
         bmesh_buffers=self.__annotations__['bmesh_buffers']
-        bm_reds=self.__annotations__['bm_reds']
         if self.inputs[0].is_linked and self.outputs[0].is_linked:
             inp_val=self.inputs[0].sv_get()[0]
             try:
@@ -187,24 +185,13 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
                             sock.hide_safe=True
             #Auto-free bmesh
             if len(bmesh_buffers)>1:
-                bmesh_buffers[0].free()
-                bmesh_buffers.pop(0)
+                del bmesh_buffers[0]
 
             if len(bmesh_objects)>1:
                 bmesh_objects[0].free()
                 bmesh_objects.pop(0)
                 self.__annotations__.update()
             
-            inp_node=self.inputs[0].other.node  
-            if inp_node.bl_idname==self.bl_idname:
-                for _bm in inp_node.__annotations__['bmesh_objects']:
-                    if _bm not in bm_reds:
-                        bm_reds.append(_bm)
-                self.__annotations__.update()
-            
-            #if len(bm_reds)>2:
-            #    bm_reds[0].free()
-            #    bm_reds.pop(0)
                 
     def draw_buttons(self,context,layout):
         layout.prop(self,'bm_category',text="")
