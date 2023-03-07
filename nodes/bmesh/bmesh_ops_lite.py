@@ -6,7 +6,7 @@ from sverchok.data_structure import updateNode
 from sverchok.utils.listutils import joiner
 from mathutils import Vector,Matrix
 import bmesh.ops
-from bmesh.types import BMesh
+from time import time
 
 class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
     """
@@ -228,7 +228,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
                         del buffs[inp_name][0]
                         buffs[inp_name].pop(0)
             else:
-                self.outputs[0].sv_set([sum(i.default_property for i in self.inputs if i.bl_idname=='SvStringsSocket')])
+                self.outputs[0].sv_set([int(time())])
  
         
     def draw_buttons(self,context,layout):
