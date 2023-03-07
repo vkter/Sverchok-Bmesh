@@ -99,6 +99,10 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         elif node.bl_idname==self.bl_idname:
             return node.input_node        
 
+
+    def _bm_update(self,context):
+        updateNode(self,context)
+        self.update=False
     def idx_update(self,context):
         if self.calculate_indices:
             self.calculate_indices=False
@@ -134,6 +138,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
     bm_category: EnumProperty(items=operation_categories,description='Geometry context for operation',update=enum_update,default=0)
     general_category: EnumProperty(items=operation_categories[2:],update=updateNode)
     geom_ops: EnumProperty(items=context_options,update=enum_update,default=0,description='Geometry operation')
+    update: BoolProperty(update=_bm_update)
     calculate_indices: BoolProperty(name='Calculate indices',description='Calculate the indices of newly created geometry(if any)\n' 'Check N-Panel if True',update=_calc_update)
     calc_verts: BoolProperty(default=True,name='vert indices',description='Calculate the indices of newly created verts (if any)',update=idx_update)
     calc_edges: BoolProperty(default=True,name='edge indices',description='Calculate the indices of newly created edges (if any)',update=idx_update)
@@ -227,7 +232,9 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
  
         
     def draw_buttons(self,context,layout):
-        layout.prop(self,'bm_category',text="")
+        a=layout.row(align=True)
+        a.prop(self,'bm_category',text="")
+        a.prop(self,'update',icon='FILE_REFRESH',icon_only=True)
         r=layout.row(align=True)
         r.prop(self,'geom_ops',text="")
         r.prop(self,'calculate_indices',icon='LINENUMBERS_ON',icon_only=True)
