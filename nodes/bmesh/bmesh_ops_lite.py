@@ -114,7 +114,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
             raise Exception('Current node is not linked')
     
     
-    def update(self):
+    def _update(self):
         updateNode(self,C)
         node=self.get_last_node()
         if node!=self:
@@ -237,7 +237,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         a=layout.row(align=True)
         a.prop(self,'bm_category',text="")
         op=a.operator(update_func,icon='FILE_REFRESH',text='')
-        op.fn_name='update'
+        op.fn_name='_update'
         r=layout.row(align=True)
         r.prop(self,'geom_ops',text='')
         r.prop(self,'calculate_indices',icon='LINENUMBERS_ON',icon_only=True)
