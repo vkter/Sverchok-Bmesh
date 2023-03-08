@@ -65,7 +65,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         for _name,_type in zip(self.inputs.keys(),data_types):
             if _type=='SvMatrixSocket':
                 self.inputs.move(self.inputs[_name].index,int(len(self.inputs[:])-1))
-                
+        self._update()        
                 
     @property          
     def bm_functions(self):
