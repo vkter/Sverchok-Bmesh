@@ -147,7 +147,7 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
     
         
     
-    operation_categories=[('create','Create','Create a BMesh primitive','OUTLINER_OB_MESH',0),('base','Base','Operations editing the BMesh Object as a whole','EDIT',1),('vertex','Vertex','Edit vertices of a Bmesh object','VERTEXSEL',2),('edge','Edge','Edit edges of a Bmesh object','EDGESEL',3),('face','Face','Edit faces of a Bmesh object','FACESEL',4)]
+    operation_categories=[('create','Create','Create a BMesh primitive','OUTLINER_OB_MESH',0),('base','Base','Operations editing the BMesh Object as a whole','EDITMODE_HLT',1),('vertex','Vertex','Edit vertices of a Bmesh object','VERTEXSEL',2),('edge','Edge','Edit edges of a Bmesh object','EDGESEL',3),('face','Face','Edit faces of a Bmesh object','FACESEL',4)]
     bmesh_buffers: {}
     bm_category: EnumProperty(items=operation_categories,description='Geometry context for operation',update=lambda self,context: self.adaptive_sockets(self.geom_ops),default=0)
     general_category: EnumProperty(items=operation_categories[2:],update=updateNode)
