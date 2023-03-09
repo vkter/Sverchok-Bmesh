@@ -1,7 +1,7 @@
 from bpy import context as C
 from bpy.utils import register_classes_factory
 from bpy.props import EnumProperty, BoolProperty
-from bpy.types import Node, Operator
+from bpy.types import Node
 from sverchok.node_tree import SverchCustomTreeNode
 from sverchok.data_structure import updateNode
 from sverchok.utils.listutils import joiner
@@ -146,12 +146,12 @@ class SvBmeshOpsLiteNode(SverchCustomTreeNode, Node):
         return locals()[self.bm_category]
     
         
-    
-    operation_categories=[('create','Create','Create a BMesh primitive','OUTLINER_OB_MESH',0),('base','Base','Operations editing the BMesh Object as a whole','EDITMODE_HLT',1),('vertex','Vertex','Edit vertices of a Bmesh object','VERTEXSEL',2),('edge','Edge','Edit edges of a Bmesh object','EDGESEL',3),('face','Face','Edit faces of a Bmesh object','FACESEL',4)]
+
     bmesh_buffers: {}
-    bm_category: EnumProperty(items=operation_categories,description='Geometry context for operation',update=lambda self,context: self.adaptive_sockets(self.geom_ops),default=0)
-    general_category: EnumProperty(items=operation_categories[2:],update=updateNode)
-    geom_ops: EnumProperty(items=context_options,update=lambda self,context: self.adaptive_sockets(self.geom_ops),default=0,description='Geometry operation')
+    bm_category: EnumProperty(items=[('create','Create','Create a BMesh primitive','OUTLINER_OB_MESH',0),('base','Base','Operations editing the BMesh Object as a whole','EDITMODE_HLT',1),('vertex','Vertex','Edit vertices of a Bmesh object','VERTEXSEL',2),('edge','Edge','Edit edges of a Bmesh object','EDGESEL',3),('face','Face','Edit faces of a Bmesh object','FACESEL',4)],\
+                              description='Geometry context for operation',update=lambda self,context: self.adaptive_sockets(self.geom_ops),default=0)
+    general_category: EnumProperty(items=__annotations__['bm_category'].keywords['items'][2:],update=updateNode)
+    geom_ops: EnumProperty(items=context_options,update=__annotations__['bm_category'].keywords['update'],default=0,description='Geometry operation')
     calculate_indices: BoolProperty(name='Calculate indices',description='Calculate the indices of newly created geometry(if any)\n' 'Check N-Panel if True',update=_calc_update)
     calc_verts: BoolProperty(name='vert indices',description='Calculate the indices of newly created verts (if any)',update=idx_update)
     calc_edges: BoolProperty(name='edge indices',description='Calculate the indices of newly created edges (if any)',update=idx_update)
